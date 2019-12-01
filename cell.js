@@ -37,13 +37,14 @@ class Cell {
                 ctx.lineTo(x, y);
                 ctx.stroke();
             }
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'red';
             ctx.font = '10px serif';
             ctx.fillStyle = 'white';
+
             // color the visited cell
             if (this.visited) {
-                ctx.fillStyle = 'red';
+                ctx.fillStyle = 'white';
                 ctx.fillText(`${this.visited}`, x + 15, y + 25);
                 //ctx.fillRect( x, y , w, w );
             }
@@ -52,10 +53,12 @@ class Cell {
         // determine if the cell's neighbors have been visited
         this.checkNeigbors = function () {
             let neighbors = [];
+
             let topNeighbor = grid[index(this.i, this.j - 1)];
             let rightNeighbor = grid[index(this.i + 1, this.j)];
             let bottomNeighbor = grid[index(this.i, this.j + 1)];
             let leftNeighbor = grid[index(this.i - 1, this.j)];
+
             if (topNeighbor && !topNeighbor.visited)
                 neighbors.push(topNeighbor);
             if (rightNeighbor && !rightNeighbor.visited)
@@ -64,6 +67,7 @@ class Cell {
                 neighbors.push(bottomNeighbor);
             if (leftNeighbor && !leftNeighbor.visited)
                 neighbors.push(leftNeighbor);
+
             if (neighbors.length > 0) {
                 let random = Math.floor(Math.random() * neighbors.length);
                 return neighbors[random];

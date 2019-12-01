@@ -2,7 +2,7 @@
 var cols, rows;
 var w= 50;
 var grid= [];
-var stack = [];
+// var stack = [];
 
 let canva = {
     width: 500,
@@ -20,13 +20,13 @@ function setup() {
     cols = Math.floor(document.getElementById('maze').width / w);
     rows = Math.floor(document.getElementById('maze').height / w);
     
-    //build the matrix
+    //create every cell of the grid to build the maze
     buildGrid();
 
-    // select random cells statrting at position (0,0)
-    mazePath( grid[0] );
-    
-    // draw the matrix and maze
+    // create maze path statrting at position (0,0)
+    //mazePath( grid[0] );
+    path();
+    // draw the maze
     drawGrid( ctx );
     
 }
@@ -40,23 +40,48 @@ function buildGrid () {
         }
     }
 }
+// Recursive way to build the maze. Tends to callback hell
+//function mazePath ( current ) {    
+//    current.visited = true;
+//    let next = current.checkNeigbors();
+//    
+//    if (next) {
+//        next.visited = true;
+//        stack.push( current );
+//        removeWalls( current, next );
+//        current = next;
+//        mazePath( current );
+//    } 
+//    else if( stack.length > 0 ) {
+//        current = stack.pop();
+//        mazePath( current );
+//    } 
+//    else return;
+//}
 
-function mazePath ( current ) {    
+// Build the maze using while loop
+function path() {
+    let current = grid[0];
     current.visited = true;
-    let next = current.checkNeigbors();
-
-    if (next) {
-        next.visited = true;
-        stack.push( current );
-        removeWalls( current, next );
-        current = next;
-        mazePath( current );
-    } 
-    else if( stack.length > 0 ) {
-        current = stack.pop();
-        mazePath( current );
-    } 
-    else return; 
+    let non = nonVisited();
+    let next = {};
+    let stack = [];
+    
+    while ( non.length > 0 ) {
+        next = current.checkNeigbors();
+        if ( next ) {
+            next.visited = true;
+            stack.push( current );
+            removeWalls( current, next );
+            current = next;
+            non = nonVisited();
+        }
+        else if ( stack.length > 0 ) {
+            current = stack.pop();
+            non = nonVisited();
+        }
+        else return;
+    }
 }
 
 function drawGrid( ctx ) {    
@@ -105,6 +130,11 @@ function index( i, j ) {
     else {
         return i + j * cols;
     }
+}
+
+function nonVisited() {
+    let non = grid.filter( el => !el.visited );
+    return non;
 }
 
 
