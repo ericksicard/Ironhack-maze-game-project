@@ -1,12 +1,11 @@
 /* eslint-disable linebreak-style */
 var cols, rows;
-var w= 50;
+var w= 60;
 var grid= [];
-// var stack = [];
 
 let canva = {
-    width: 500,
-    height: 500
+    width: 600,
+    height: 600
 };
 
 function setup() {
@@ -19,6 +18,9 @@ function setup() {
     // number of columns & rows
     cols = Math.floor(document.getElementById('maze').width / w);
     rows = Math.floor(document.getElementById('maze').height / w);
+
+    // player: (image source, x, y, width, height, position)
+    let player = new Player( './img/walker.png', w/2, w/2, w/2, w/2, 0 );
     
     //create every cell of the grid to build the maze
     buildGrid();
@@ -26,13 +28,15 @@ function setup() {
     // create maze path statrting at position (0,0)
     //mazePath( grid[0] );
     path();
+
     // draw the maze
-    drawGrid( ctx );
-    
+    draw ( ctx, player );
+
+    document.onkeydown = event => movesPlayer( event, player, ctx );    
 }
 
+// create the cell objects
 function buildGrid () {
-    // create the cell objects
     for ( let y = 0; y < rows; y++ ) {
         for ( let x = 0; x < cols; x++ ) {
             let cell = new Cell(x, y);
@@ -84,15 +88,27 @@ function path() {
     }
 }
 
-function drawGrid( ctx ) {    
+function draw ( ctx, obj ) {
+
+    ctx.clearRect(0, 0, canva.width, canva.height);
+
     // draw the background
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canva.width, canva.height);    
 
     // display the grid
     for ( let i = 0; i < grid.length; i++) {
         grid[i].show( ctx );
-    }    
+    }
+
+    // display player
+    let img = new Image();
+    img.src = obj.imgScr;
+    img.addEventListener( 'load', function() {
+        ctx.drawImage(img, (obj.posX - obj.imgW/2), (obj.posY - obj.imgH/2), obj.imgW, obj.imgH);
+    }); 
 }
+
 
 function removeWalls( curentCell, nextCell ) {
     let x = curentCell.i - nextCell.i;
@@ -117,9 +133,33 @@ function removeWalls( curentCell, nextCell ) {
         curentCell.walls[2] = false;
         nextCell.walls[0] = false;
     }
+}
 
-
-
+function movesPlayer( event, player, ctx ) {
+    let keyCodes = [38, 39, 40, 37];  //top, right, bottom, left
+    const key = event.keyCode;
+            
+    if ( keyCodes.includes(key) ) {
+        event.preventDefault();
+        if ( key === 38 && player.posY >= w/2 && !grid[player.idx].walls[0] ) {
+            player.posY -= w;
+            player.idx -= 10;
+        }
+        else if ( key === 39 && player.posX <= canva.width - w/2 && !grid[player.idx].walls[1] ) {
+            player.posX += w;
+            player.idx += 1;
+        }
+        else if ( key === 40 && player.posY <= canva.height - w/2 && !grid[player.idx].walls[2] ) {
+            player.posY += w;
+            player.idx += 10;
+        }
+        else if ( key === 37 && player.posX >= w/2 && !grid[player.idx].walls[3] ) {
+            player.posX -= w;
+            player.idx -= 1;
+        }
+    }
+    
+    draw( ctx, player );
 }
 
 // cells indexes

@@ -39,13 +39,13 @@ class Cell {
             }
             ctx.lineWidth = 2;
             ctx.strokeStyle = 'red';
-            ctx.font = '10px serif';
-            ctx.fillStyle = 'white';
+            //ctx.font = '10px serif';
+            //ctx.fillStyle = 'white';
 
             // color the visited cell
             if (this.visited) {
                 ctx.fillStyle = 'white';
-                ctx.fillText(`${this.visited}`, x + 15, y + 25);
+                ctx.fillText(`${this.i + this.j * cols}`, x + 15, y + 25);
                 //ctx.fillRect( x, y , w, w );
             }
         };
