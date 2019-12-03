@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 var cols, rows;
-var w= 60;
+var cellWith = 60;
 var grid= [];
 
 let canva = {
@@ -16,23 +16,26 @@ function setup() {
     let ctx = document.getElementById('maze').getContext('2d');
     
     // number of columns & rows
-    cols = Math.floor(document.getElementById('maze').width / w);
-    rows = Math.floor(document.getElementById('maze').height / w);
+    cols = Math.floor(document.getElementById('maze').width / cellWith);
+    rows = Math.floor(document.getElementById('maze').height / cellWith);
 
-    // player: (image source, x, y, width, height, position)
-    let player = new Player( './img/walker.png', w/2, w/2, w/2, w/2, 0 );
     
     //create every cell of the grid to build the maze
     buildGrid();
-
+    
     // create maze path statrting at position (0,0)
-    //mazePath( grid[0] );
     path();
-
+    
+    // player: (image source, x, y, width, height, position)
+    let player = new Player( './img/walker.png', cellWith/2, cellWith/2, cellWith/2, cellWith/2, 0 );
+    document.addEventListener('keydown' , event => {
+        player.moves( event )
+        draw ( ctx, player );
+    });
+        
     // draw the maze
     draw ( ctx, player );
 
-    document.onkeydown = event => movesPlayer( event, player, ctx );    
 }
 
 // create the cell objects
@@ -44,24 +47,6 @@ function buildGrid () {
         }
     }
 }
-// Recursive way to build the maze. Tends to callback hell
-//function mazePath ( current ) {    
-//    current.visited = true;
-//    let next = current.checkNeigbors();
-//    
-//    if (next) {
-//        next.visited = true;
-//        stack.push( current );
-//        removeWalls( current, next );
-//        current = next;
-//        mazePath( current );
-//    } 
-//    else if( stack.length > 0 ) {
-//        current = stack.pop();
-//        mazePath( current );
-//    } 
-//    else return;
-//}
 
 // Build the maze using while loop
 function path() {
@@ -106,7 +91,7 @@ function draw ( ctx, obj ) {
     img.src = obj.imgScr;
     img.addEventListener( 'load', function() {
         ctx.drawImage(img, (obj.posX - obj.imgW/2), (obj.posY - obj.imgH/2), obj.imgW, obj.imgH);
-    }); 
+    });
 }
 
 
@@ -133,33 +118,6 @@ function removeWalls( curentCell, nextCell ) {
         curentCell.walls[2] = false;
         nextCell.walls[0] = false;
     }
-}
-
-function movesPlayer( event, player, ctx ) {
-    let keyCodes = [38, 39, 40, 37];  //top, right, bottom, left
-    const key = event.keyCode;
-            
-    if ( keyCodes.includes(key) ) {
-        event.preventDefault();
-        if ( key === 38 && player.posY >= w/2 && !grid[player.idx].walls[0] ) {
-            player.posY -= w;
-            player.idx -= 10;
-        }
-        else if ( key === 39 && player.posX <= canva.width - w/2 && !grid[player.idx].walls[1] ) {
-            player.posX += w;
-            player.idx += 1;
-        }
-        else if ( key === 40 && player.posY <= canva.height - w/2 && !grid[player.idx].walls[2] ) {
-            player.posY += w;
-            player.idx += 10;
-        }
-        else if ( key === 37 && player.posX >= w/2 && !grid[player.idx].walls[3] ) {
-            player.posX -= w;
-            player.idx -= 1;
-        }
-    }
-    
-    draw( ctx, player );
 }
 
 // cells indexes

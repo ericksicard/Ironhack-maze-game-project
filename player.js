@@ -8,20 +8,30 @@ class Player {
         this.idx = idx;
 
         // player moves
-        //function moves() {
-        //    document.onkeydown = event => {
-        //        let keyCodes = [38, 39, 40, 37];  //top, right, bottom, left
-        //        const key = event.keyCode;
-        //        
-        //        if ( keyCodes.includes(key) ) {
-        //            console.log(keyCodes.includes(key));
-        //            event.preventDefault();
-        //            if ( key === 38 && this.posY >= 0 ) this.posY -= 20;
-        //            else if ( key === 39 && this.posX <= 500 - this.imgW ) this.posX += 20;
-        //            else if ( key === 40 && this.posY <= 760 - this.imgH ) this.posY += 20;
-        //            else if ( key === 37 && this.posX >= 0 ) this.posX -= 20;
-        //        } 
-        //    };
-        //}
+        this.moves = function( event ) {
+            let keyCodes = [38, 39, 40, 37];  //top, right, bottom, left
+            const key = event.keyCode;
+            console.log(key)
+                    
+            if ( keyCodes.includes(key) ) {
+                event.preventDefault();
+                if ( key === 38 && this.posY >= w/2 && !grid[this.idx].walls[0] ) {
+                    this.posY -= cellWith;
+                    this.idx -= cols;
+                }
+                else if ( key === 39 && this.posX <= canva.width - w/2 && !grid[this.idx].walls[1] ) {
+                    this.posX += cellWith;
+                    this.idx += 1;
+                }
+                else if ( key === 40 && this.posY <= canva.height - w/2 && !grid[this.idx].walls[2] ) {
+                    this.posY += cellWith;
+                    this.idx += cols;
+                }
+                else if ( key === 37 && this.posX >= w/2 && !grid[this.idx].walls[3] ) {
+                    this.posX -= cellWith;
+                    this.idx -= 1;
+                }
+            }
+        }
     }
 }

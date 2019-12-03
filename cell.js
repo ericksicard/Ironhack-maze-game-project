@@ -10,30 +10,30 @@ class Cell {
         // draw the cells of the grid
         this.show = function (ctx) {
             // cell location
-            let x = this.i * w;
-            let y = this.j * w;
+            let x = this.i * cellWith;
+            let y = this.j * cellWith;
             // draw cell
             if (this.walls[0]) { // top wall
                 ctx.beginPath(); // Start a new path
                 ctx.moveTo(x, y); // Move the pen to the line starting point
-                ctx.lineTo(x + w, y); // Draw a line to the ending point
+                ctx.lineTo(x + cellWith, y); // Draw a line to the ending point
                 ctx.stroke(); // Render the path            
             }
             if (this.walls[1]) { // rigth wall
                 ctx.beginPath();
-                ctx.moveTo(x + w, y);
-                ctx.lineTo(x + w, y + w);
+                ctx.moveTo(x + cellWith, y);
+                ctx.lineTo(x + cellWith, y + cellWith);
                 ctx.stroke();
             }
             if (this.walls[2]) { // bottom wall
                 ctx.beginPath();
-                ctx.moveTo(x + w, y + w);
-                ctx.lineTo(x, y + w);
+                ctx.moveTo(x + cellWith, y + cellWith);
+                ctx.lineTo(x, y + cellWith);
                 ctx.stroke();
             }
             if (this.walls[3]) { // left wall
                 ctx.beginPath();
-                ctx.moveTo(x, y + w);
+                ctx.moveTo(x, y + cellWith);
                 ctx.lineTo(x, y);
                 ctx.stroke();
             }
