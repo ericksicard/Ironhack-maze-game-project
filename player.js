@@ -5,10 +5,10 @@ class Player {
         this.posY = y;
         this.imgW = w;
         this.imgH = h;
-        this.idx = idx;
+        this.idx = idx;        
 
         // player moves
-        this.moves = function( event ) {
+        this.moves =  event => {
             let keyCodes = [38, 39, 40, 37];  //top, right, bottom, left
             const key = event.keyCode;
             console.log(key)
@@ -32,6 +32,12 @@ class Player {
                     this.idx -= 1;
                 }
             }
+        }
+
+        this.show = function( ctx ) {
+            let playerImg = new Image();
+            playerImg.src = this.imgScr;
+            ctx.drawImage(playerImg, (this.posX - this.imgW/2), (this.posY - this.imgH/2), this.imgW, this.imgH);
         }
     }
 }
