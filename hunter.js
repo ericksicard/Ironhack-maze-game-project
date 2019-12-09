@@ -6,6 +6,7 @@ class Hunter {
         this.imgW = w;
         this.imgH = h;
         this.idx = idx;
+        this.hunted = undefined;
 
         // draw the hunter
         this.show = function( ctx ) {
@@ -20,28 +21,39 @@ class Hunter {
         this.moves = () => {
             // implement a random selection to move the hunter
             // CODE GOES HERE
-            
-            
-            // moves up
-            if ( this.posY >= w/2 && !grid[this.idx].walls[0] ) {
-                this.posY -= cellWith;
-                this.idx -= cols;
-            }
-            // moves right
-            if ( this.posX <= canva.width - w/2 && !grid[this.idx].walls[1] ) {
-                this.posX += cellWith;
-                this.idx += 1;
-            }
-            // moves down
-            if ( this.posY <= canva.height - w/2 && !grid[this.idx].walls[2] ) {
-                this.posY += cellWith;
-                this.idx += cols;
-            }
-            // moves left
-            if ( this.posX >= w/2 && !grid[this.idx].walls[3] ) {
-                this.posX -= cellWith;
-                this.idx -= 1;
-            }            
+            //Hunter inside the grid
+            if ( this.posY >= w/2 && this.posX <= canva.width - w/2 && 
+                this.posY <= canva.height - w/2 && this.posX >= w/2) {
+                // moves up
+                if ( (!grid[this.idx].walls[0] && this.hunted !== this.idx - cols) ||
+                    ( grid[this.idx].walls[1] && grid[this.idx].walls[2] && grid[this.idx].walls[3]) ) {
+                    this.hunted = this.idx;
+                    this.posY -= cellWith;
+                    this.idx -= cols;
+                }
+                // moves right
+                else if ( (!grid[this.idx].walls[1] && this.hunted !== this.idx + 1) ||
+                    ( grid[this.idx].walls[0] && grid[this.idx].walls[2] && grid[this.idx].walls[3])) {
+                    this.hunted = this.idx;
+                    this.posX += cellWith;
+                    this.idx += 1;
+                }
+                // moves down
+                else if ( (!grid[this.idx].walls[2] && this.hunted !== this.idx + cols) ||
+                    ( grid[this.idx].walls[0] && grid[this.idx].walls[1] && grid[this.idx].walls[3]) ) {
+                    this.hunted = this.idx;
+                    this.posY += cellWith;
+                    this.idx += cols;
+                }
+                // moves left
+                else if ( (!grid[this.idx].walls[3] && this.hunted !== this.idx - 1) ||
+                    ( grid[this.idx].walls[0] && grid[this.idx].walls[1] && grid[this.idx].walls[2]) ) {
+                    this.hunted = this.idx;
+                    this.posX -= cellWith;
+                    this.idx -= 1;
+                }
+
+            }       
         }
     }
 }
