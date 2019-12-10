@@ -27,7 +27,7 @@ function setup( playerStartPoint , hunterStartPoint ) {
     path();
     
     // hunter: (image source, x, y, width, height, position)
-    let hunter = new Hunter( 
+    let hunter1 = new Hunter( 
         './img/hunter.png',                                 // img
         grid[hunterStartPoint].i * cellWith + cellWith/2,   // posX
         grid[hunterStartPoint].j * cellWith + cellWith/2,   // posY
@@ -35,6 +35,28 @@ function setup( playerStartPoint , hunterStartPoint ) {
         cellWith/2,                                         // imgW
         hunterStartPoint                                    // idx    
         );
+
+    // hunter2: (image source, x, y, width, height, position)
+    let hunter2 = new Hunter( 
+        './img/hunter.png',                                 // img
+        grid[hunterStartPoint - 9].i * cellWith + cellWith/2,   // posX
+        grid[hunterStartPoint].j * cellWith + cellWith/2,   // posY
+        cellWith/2,                                         // imgH
+        cellWith/2,                                         // imgW
+        hunterStartPoint - 9                                   // idx    
+        );
+
+    // hunter3: (image source, x, y, width, height, position)
+    let hunter3 = new Hunter( 
+        './img/hunter.png',                                 // img
+        grid[hunterStartPoint].i * cellWith + cellWith/2,   // posX
+        grid[hunterStartPoint - 90].j * cellWith + cellWith/2,   // posY
+        cellWith/2,                                         // imgH
+        cellWith/2,                                         // imgW
+        hunterStartPoint - 90                                   // idx    
+        );
+
+    let hunterArr = [hunter1, hunter2, hunter3];
 
     // player: (image source, x, y, width, height, position)
     let player = new Player(
@@ -51,7 +73,7 @@ function setup( playerStartPoint , hunterStartPoint ) {
     });
         
     // draw the maze
-    draw ( ctx, player, hunter );
+    draw ( ctx, player, hunterArr );
 }
 
 // create the cell objects of the grid
@@ -90,7 +112,7 @@ function path() {
 }
 
 // display the maze
-function draw ( ctx, player, hunter ) {
+function draw ( ctx, player, hunterArr ) {
 
     let intv = setInterval( function(){
         ctx.clearRect(0, 0, canva.width, canva.height);
@@ -108,9 +130,13 @@ function draw ( ctx, player, hunter ) {
         player.show( ctx )
     
         // display hunter
-        hunter.show( ctx );
-        hunter.moves()
-    }, 1000/5 )
+
+        for ( let i = 0; i < hunterArr.length; i++ ) {
+            //(pending) include an if condition with random number to lower the hunters speed
+            hunterArr[i].show( ctx );
+            hunterArr[i].moves();
+        }
+    }, 1000/ 5 )
 }
 
 

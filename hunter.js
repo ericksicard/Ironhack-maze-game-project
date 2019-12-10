@@ -195,7 +195,7 @@ class Hunter {
             this.idx -= cols;
         }
         this.movesRight = () => {
-            this.posX += cellWith;
+            this.posX += cellWith
             this.idx += 1;
         }
         this.movesDown = () => {
