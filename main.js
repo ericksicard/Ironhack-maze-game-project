@@ -26,7 +26,7 @@ function setup( playerStartPoint , hunterStartPoint ) {
     // create maze path statrting at position (0,0)
     path();
     
-    // hunter: (image source, x, y, width, height, position)
+    // hunter: (image_source, x, y, width, height, position)
     let hunter1 = new Hunter( 
         './img/hunter.png',                                 // img
         grid[hunterStartPoint].i * cellWith + cellWith/2,   // posX
@@ -34,9 +34,9 @@ function setup( playerStartPoint , hunterStartPoint ) {
         cellWith/2,                                         // imgH
         cellWith/2,                                         // imgW
         hunterStartPoint                                    // idx    
-        );
+    );
 
-    // hunter2: (image source, x, y, width, height, position)
+    // hunter2: (image_source, x, y, width, height, position)
     let hunter2 = new Hunter( 
         './img/hunter.png',                                 // img
         grid[hunterStartPoint - 9].i * cellWith + cellWith/2,   // posX
@@ -44,9 +44,9 @@ function setup( playerStartPoint , hunterStartPoint ) {
         cellWith/2,                                         // imgH
         cellWith/2,                                         // imgW
         hunterStartPoint - 9                                   // idx    
-        );
+    );
 
-    // hunter3: (image source, x, y, width, height, position)
+    // hunter3: (image_source, x, y, width, height, position)
     let hunter3 = new Hunter( 
         './img/hunter.png',                                 // img
         grid[hunterStartPoint].i * cellWith + cellWith/2,   // posX
@@ -54,7 +54,7 @@ function setup( playerStartPoint , hunterStartPoint ) {
         cellWith/2,                                         // imgH
         cellWith/2,                                         // imgW
         hunterStartPoint - 90                                   // idx    
-        );
+    );
 
     let hunterArr = [hunter1, hunter2, hunter3];
 
@@ -66,7 +66,7 @@ function setup( playerStartPoint , hunterStartPoint ) {
         cellWith/2,                                         // imgH
         cellWith/2,                                         // imgW
         playerStartPoint                                    // idx
-        );
+    );
     
     document.addEventListener('keydown' , event => {
         player.moves( event )
@@ -127,19 +127,26 @@ function draw ( ctx, player, hunterArr ) {
         }
     
         // display player
-        player.show( ctx )
+        player.show( ctx );
     
-        // display hunter
-
+        // display hunters
         for ( let i = 0; i < hunterArr.length; i++ ) {
-            //(pending) include an if condition with random number to lower the hunters speed
             hunterArr[i].show( ctx );
+        }
+
+        // cheacking collision with hunters
+        let collisioned = collision( player, hunterArr);
+        if ( collisioned ) clearInterval( intv );
+
+        // moves hunters
+        for ( let i = 0; i < hunterArr.length; i++ ) {
             hunterArr[i].moves();
         }
-    }, 1000/ 5 )
+
+    }, 1000/ 5 );
 }
 
-
+// removing cells to create the path
 function removeWalls( curentCell, nextCell ) {
     let x = curentCell.i - nextCell.i;
     let y = curentCell.j - nextCell.j;
@@ -175,9 +182,30 @@ function index( i, j ) {
     }
 }
 
+// creating array of non visted cells
 function nonVisited() {
     let non = grid.filter( el => !el.visited );
     return non;
+}
+
+// cheacking for collision player - hunter
+function collision( player, hunterArr ) {
+    let collArr = [];
+
+    for( let i = 0; i < hunterArr.length; i++ ) {        
+        let colRight = ( (player.posX + player.imgW/2 >= hunterArr[i].posX) && (player.posX <= hunterArr[i].posX) );
+        let colLeft = ( (player.posX - player.imgW/2 <= hunterArr[i].posX + hunterArr[i].imgW/2) && (player.posX + player.imgW/2 >= hunterArr[i].posX + hunterArr[i].imgW/2) );
+        let colTop = ( (player.posY - player.imgH/2 <= hunterArr[i].posY + hunterArr[i].imgH/2) && (player.posY + player.imgH/2 >= hunterArr[i].posY + hunterArr[i].imgH/2) );
+        let colBot = ( (player.posY + player.imgH/2 >= hunterArr[i].posY - hunterArr[i].imgH/2) && (player.posY <= hunterArr[i].posY) );
+
+        if ( (colRight || colLeft) && (colTop || colBot)) {
+            collArr.push( true );
+        } 
+        else collArr.push( false );
+    }
+
+    if( collArr.includes( true ) ) return true;
+    return false;
 }
 
 
