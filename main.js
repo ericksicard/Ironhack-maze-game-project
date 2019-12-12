@@ -8,16 +8,25 @@ let canva = {
     height: 600
 };
 
-function setup( playerStartPoint , hunterStartPoint ) {
+let hunterArr = [];
+
+function setup( playerStartPoint, difLevel ) {
     // insert canvas HTML
     let canvasHTML = `<canvas id="maze" width=${canva.width} height=${canva.height}></canvas>`;
     document.querySelector('body').insertAdjacentHTML('afterBegin', canvasHTML);  
     // set canvas context
     let ctx = document.getElementById('maze').getContext('2d');
+
+    // maze difficulty
+    if( difLevel === 'medium') cellWith = 50;
+    if( difLevel === 'hard') cellWith = 30;
     
     // number of columns & rows
     cols = Math.floor(document.getElementById('maze').width / cellWith);
     rows = Math.floor(document.getElementById('maze').height / cellWith);
+
+    // hunters' general starting position
+    let hunterStartPoint = cols * rows;
 
     
     //create every cell of the grid to build the maze
@@ -26,37 +35,45 @@ function setup( playerStartPoint , hunterStartPoint ) {
     // create maze path statrting at position (0,0)
     path();
     
-    // hunter: (image_source, x, y, width, height, position)
+    // hunter bottom right
     let hunter1 = new Hunter( 
-        './img/hunter.png',                                 // img
-        grid[hunterStartPoint].i * cellWith + cellWith/2,   // posX
-        grid[hunterStartPoint].j * cellWith + cellWith/2,   // posY
-        cellWith/2,                                         // imgH
-        cellWith/2,                                         // imgW
-        hunterStartPoint                                    // idx    
+        './img/hunter.png',                                     // img
+        grid[hunterStartPoint - 1].i * cellWith + cellWith/2,   // posX
+        grid[hunterStartPoint - 1].j * cellWith + cellWith/2,   // posY
+        cellWith/2,                                             // imgH
+        cellWith/2,                                             // imgW
+        hunterStartPoint - 1                                    // idx    
     );
 
-    // hunter2: (image_source, x, y, width, height, position)
+    // hunter2 bottom left
     let hunter2 = new Hunter( 
-        './img/hunter.png',                                 // img
-        grid[hunterStartPoint - 9].i * cellWith + cellWith/2,   // posX
-        grid[hunterStartPoint].j * cellWith + cellWith/2,   // posY
-        cellWith/2,                                         // imgH
-        cellWith/2,                                         // imgW
-        hunterStartPoint - 9                                   // idx    
+        './img/hunter.png',                                      // img
+        grid[hunterStartPoint - cols].i * cellWith + cellWith/2, // posX
+        grid[hunterStartPoint - cols].j * cellWith + cellWith/2, // posY
+        cellWith/2,                                              // imgH
+        cellWith/2,                                              // imgW
+        hunterStartPoint - cols                                  // idx    
     );
 
-    // hunter3: (image_source, x, y, width, height, position)
+    // hunter3 top left
     let hunter3 = new Hunter( 
-        './img/hunter.png',                                 // img
-        grid[hunterStartPoint].i * cellWith + cellWith/2,   // posX
-        grid[hunterStartPoint - 90].j * cellWith + cellWith/2,   // posY
-        cellWith/2,                                         // imgH
-        cellWith/2,                                         // imgW
-        hunterStartPoint - 90                                   // idx    
+        './img/hunter.png',                                     // img
+        grid[cols - 1].i * cellWith + cellWith/2,               // posX
+        grid[rows - 1].j * cellWith + cellWith/2,               // posY
+        cellWith/2,                                             // imgH
+        cellWith/2,                                             // imgW
+        rows - 1                                                // idx    
     );
 
-    let hunterArr = [hunter1, hunter2, hunter3];
+    // hunters difficulty
+    if( difLevel === 'easy') hunterArr = [hunter1];
+    if( difLevel === 'medium') {
+        hunterArr = [hunter1, hunter2];
+    }
+    if( difLevel === 'hard') {
+        hunterArr = [hunter1, hunter2, hunter3];
+    }
+
 
     // player: (image source, x, y, width, height, position)
     let player = new Player(
@@ -138,6 +155,10 @@ function draw ( ctx, player, hunterArr ) {
         let collisioned = collision( player, hunterArr);
         if ( collisioned ) clearInterval( intv );
 
+        // winning
+        let won = winning( player );
+        if( won ) clearInterval( intv );
+
         // moves hunters
         for ( let i = 0; i < hunterArr.length; i++ ) {
             hunterArr[i].moves();
@@ -208,9 +229,15 @@ function collision( player, hunterArr ) {
     return false;
 }
 
+// checking for winning condition
+function winning( player ) {
+    if( player.idx == grid.length - 1 ) return true;
+    return false;
+}
+
 
 // *************************************************** //
 
 window.addEventListener('load', () => {
-    setup( 0, 99 );
+    setup( 0, 'medium' );
 });

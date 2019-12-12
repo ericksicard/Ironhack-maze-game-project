@@ -43,11 +43,11 @@ class Cell {
             //ctx.fillStyle = 'white';
 
             // color the visited cell
-            if (this.visited) {
-                ctx.fillStyle = 'white';
-                ctx.fillText(`${this.i + this.j * cols}`, x + 15, y + 25);
-                //ctx.fillRect( x, y , w, w );
-            }
+            //if (this.visited) {
+            //    ctx.fillStyle = 'white';
+            //    ctx.fillText(`${this.i + this.j * cols}`, x + 15, y + 25);
+            //    //ctx.fillRect( x, y , w, w );
+            //}
         };
 
         // determine if the cell's neighbors have been visited
