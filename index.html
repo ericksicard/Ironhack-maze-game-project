@@ -8,6 +8,19 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
+        <div id="game_frame">
+            <div id="control">
+                <label for="maze-select">Maze complexity:</label>
+                <select name="level" id="maze-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+                <button type="button" id='create'>
+                    Create Maze
+                </button>
+            </div>
+        </div>
         <script src="./cell.js" async defer></script>
         <script src="./player.js" async defer></script>
         <script src="./hunter.js" async defer></script>

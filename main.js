@@ -13,7 +13,7 @@ let hunterArr = [];
 function setup( playerStartPoint, difLevel ) {
     // insert canvas HTML
     let canvasHTML = `<canvas id="maze" width=${canva.width} height=${canva.height}></canvas>`;
-    document.querySelector('body').insertAdjacentHTML('afterBegin', canvasHTML);  
+    document.querySelector('#game_frame').insertAdjacentHTML('afterBegin', canvasHTML);  
     // set canvas context
     let ctx = document.getElementById('maze').getContext('2d');
 
