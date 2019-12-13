@@ -54,10 +54,10 @@ class Cell {
         this.checkNeigbors = function () {
             let neighbors = [];
 
-            let topNeighbor = grid[index(this.i, this.j - 1)];
-            let rightNeighbor = grid[index(this.i + 1, this.j)];
-            let bottomNeighbor = grid[index(this.i, this.j + 1)];
-            let leftNeighbor = grid[index(this.i - 1, this.j)];
+            let topNeighbor = grid[this.index(this.i, this.j - 1)];
+            let rightNeighbor = grid[this.index(this.i + 1, this.j)];
+            let bottomNeighbor = grid[this.index(this.i, this.j + 1)];
+            let leftNeighbor = grid[this.index(this.i - 1, this.j)];
 
             if (topNeighbor && !topNeighbor.visited)
                 neighbors.push(topNeighbor);
@@ -73,5 +73,15 @@ class Cell {
                 return neighbors[random];
             }
         };
+
+        // cells indexes
+        this.index = function( i, j ) {
+            if ( i < 0 || j < 0 || i > cols - 1 || j > cols - 1 ) {
+                return -1;
+            }
+            else {
+                return i + j * cols;
+            }
+        }
     }
 }

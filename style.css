@@ -1,0 +1,64 @@
+.game_frame {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#empty {
+    width: 600px;
+    height: 600px;
+    background-color: black;
+    color: blanchedalmond;
+}
+img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+
+/******* start button ********/
+.start {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: .5em;
+}
+
+/******* select menu ********/
+  .select-level {
+    display: block;
+    font-size: 16px;
+    font-family: sans-serif;
+    color: white;
+    line-height: 1.3;
+    padding: .6em 1.4em .5em .8em;
+    width: 150px;
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid;
+    border-radius: .5em;
+    background-color: #4CAF50;
+}
+.select-level::-ms-expand {
+    display: none;
+}
+.select-level:hover {
+    border-color: darkgreen;
+}
+.select-level:focus {
+    box-shadow: 0 0 0 3px -moz-mac-focusring;
+    color: white; 
+    outline: none;
+}
+.select-level option {
+    font-weight:normal;
+}
+

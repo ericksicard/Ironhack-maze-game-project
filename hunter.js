@@ -12,18 +12,16 @@ class Hunter {
         this.show = function( ctx ) {
             let hunterImg = new Image();
             hunterImg.src = this.imgScr;
-            //hunterImg.addEventListener( 'load', () => {
-                ctx.drawImage(hunterImg, (this.posX - this.imgW/2), (this.posY - this.imgH/2), this.imgW, this.imgH);
-            //});
+            ctx.drawImage(hunterImg, (this.posX - this.imgW/2), (this.posY - this.imgH/2), this.imgW, this.imgH);
         }
 
-        // player moves
+        // hunter moves
         this.moves = () => {
 
             //Hunter inside the grid
             if ( this.posY >= w/2 && this.posX <= canva.width - w/2 && 
                 this.posY <= canva.height - w/2 && this.posX >= w/2) {
-                
+                console.log(this.idx);    
                 // moves up
                 if ( grid[this.idx].walls[1] && grid[this.idx].walls[2] && grid[this.idx].walls[3] ) {
                     this.hunted = this.idx;

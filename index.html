@@ -5,20 +5,21 @@
         <title>Maze Game</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="game_frame">
-            <div id="control">
-                <label for="maze-select">Maze complexity:</label>
-                <select name="level" id="maze-select">
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
+        <div class="game_frame">
+            <div id= "empty">
+                <img src="https://media.giphy.com/media/8FDhJzbSLQvhmDVeTW/giphy.gif" alt="maze pattern">
+            </div>
+            <div>
+                <button class="start"> Start </button>
+                <select class="select-level">
+                    <option value = "select">Select Level</option>
+                    <option value = "easy">Easy</option>
+                    <option value = "medium">Medium</option>
+                    <option value = "hard">Hard</option>
                 </select>
-                <button type="button" id='create'>
-                    Create Maze
-                </button>
             </div>
         </div>
         <script src="./cell.js" async defer></script>

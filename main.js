@@ -1,33 +1,37 @@
 /* eslint-disable linebreak-style */
 var cols, rows;
-var cellWith = 60;
+var cellWith = 0;
 var grid= [];
+var hunterArr = [];
 
-let canva = {
+var canva = {
     width: 600,
     height: 600
 };
 
-let hunterArr = [];
 
 function setup( playerStartPoint, difLevel ) {
+    
     // insert canvas HTML
-    let canvasHTML = `<canvas id="maze" width=${canva.width} height=${canva.height}></canvas>`;
-    document.querySelector('#game_frame').insertAdjacentHTML('afterBegin', canvasHTML);  
+    let canvasHTML = `<div id="maze-container">
+                        <canvas id="maze" width=${canva.width} height=${canva.height}></canvas>
+                      </div>`;
+    document.querySelector('.game_frame').insertAdjacentHTML('afterBegin', canvasHTML);  
     // set canvas context
     let ctx = document.getElementById('maze').getContext('2d');
 
     // maze difficulty
-    if( difLevel === 'medium') cellWith = 50;
-    if( difLevel === 'hard') cellWith = 30;
+    if( difLevel === 'select') cellWith = 600;
+    else if( difLevel === 'easy') cellWith = 60;
+    else if( difLevel === 'medium') cellWith = 50;
+    else if( difLevel === 'hard') cellWith = 30;
     
     // number of columns & rows
-    cols = Math.floor(document.getElementById('maze').width / cellWith);
-    rows = Math.floor(document.getElementById('maze').height / cellWith);
+    cols = canva.width / cellWith;
+    rows = canva.height / cellWith;
 
     // hunters' general starting position
     let hunterStartPoint = cols * rows;
-
     
     //create every cell of the grid to build the maze
     buildGrid();
@@ -67,12 +71,8 @@ function setup( playerStartPoint, difLevel ) {
 
     // hunters difficulty
     if( difLevel === 'easy') hunterArr = [hunter1];
-    if( difLevel === 'medium') {
-        hunterArr = [hunter1, hunter2];
-    }
-    if( difLevel === 'hard') {
-        hunterArr = [hunter1, hunter2, hunter3];
-    }
+    else if( difLevel === 'medium') hunterArr = [hunter1, hunter2];
+    else if( difLevel === 'hard') hunterArr = [hunter1, hunter2, hunter3];
 
 
     // player: (image source, x, y, width, height, position)
@@ -86,7 +86,7 @@ function setup( playerStartPoint, difLevel ) {
     );
     
     document.addEventListener('keydown' , event => {
-        player.moves( event )
+        player.moves( event );
     });
         
     // draw the maze
@@ -194,14 +194,14 @@ function removeWalls( curentCell, nextCell ) {
 }
 
 // cells indexes
-function index( i, j ) {
-    if ( i < 0 || j < 0 || i > cols - 1 || j > cols - 1 ) {
-        return -1;
-    }
-    else {
-        return i + j * cols;
-    }
-}
+//function index( i, j ) {
+//    if ( i < 0 || j < 0 || i > cols - 1 || j > cols - 1 ) {
+//        return -1;
+//    }
+//    else {
+//        return i + j * cols;
+//    }
+//}
 
 // creating array of non visted cells
 function nonVisited() {
@@ -239,5 +239,16 @@ function winning( player ) {
 // *************************************************** //
 
 window.addEventListener('load', () => {
-    setup( 0, 'medium' );
+
+    let level = document.querySelector('.select-level').value;
+    document.querySelector('.select-level').addEventListener('change', (e) => {
+        level = e.target.value;
+    });
+
+    document.querySelector('.start').addEventListener('click', () => {
+        grid = [];
+        if( document.getElementById('empty') ) document.getElementById('empty').remove();
+        if( document.getElementById('maze-container') ) document.getElementById('maze-container').remove();
+        setup( 0, level );
+    });
 });
