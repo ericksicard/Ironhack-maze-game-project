@@ -29,9 +29,6 @@ function setup( playerStartPoint, difLevel ) {
     // number of columns & rows
     cols = canva.width / cellWith;
     rows = canva.height / cellWith;
-
-    // hunters' general starting position
-    let hunterStartPoint = cols * rows;
     
     //create every cell of the grid to build the maze
     buildGrid();
@@ -39,6 +36,9 @@ function setup( playerStartPoint, difLevel ) {
     // create maze path statrting at position (0,0)
     path();
     
+    // hunters' general starting position
+    let hunterStartPoint = cols * rows;
+
     // hunter bottom right
     let hunter1 = new Hunter( 
         './img/hunter.png',                                     // img
@@ -107,12 +107,12 @@ function buildGrid () {
 function path() {
     let current = grid[0];
     current.visited = true;
-    let non = nonVisited();
+    let non = nonVisited();  // array of non-visited cells
     let next = {};
     let stack = [];
     
     while ( non.length > 0 ) {
-        next = current.checkNeigbors();
+        next = current.checkNeigbors(); // getting a random non-visited neighbor
         if ( next ) {
             next.visited = true;
             stack.push( current );
@@ -241,6 +241,7 @@ function winning( player ) {
 window.addEventListener('load', () => {
 
     let level = document.querySelector('.select-level').value;
+
     document.querySelector('.select-level').addEventListener('change', (e) => {
         level = e.target.value;
     });
