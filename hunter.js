@@ -20,8 +20,7 @@ class Hunter {
 
             //Hunter inside the grid
             if ( this.posY >= w/2 && this.posX <= canva.width - w/2 && 
-                this.posY <= canva.height - w/2 && this.posX >= w/2) {
-                console.log(this.idx);    
+                this.posY <= canva.height - w/2 && this.posX >= w/2) { 
                 // moves up
                 if ( grid[this.idx].walls[1] && grid[this.idx].walls[2] && grid[this.idx].walls[3] ) {
                     this.hunted = this.idx;

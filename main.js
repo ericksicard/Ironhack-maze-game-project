@@ -3,6 +3,8 @@ var cols, rows;
 var cellWith = 0;
 var grid= [];
 var hunterArr = [];
+let frames = 0;
+let intv;
 
 var canva = {
     width: 600,
@@ -11,7 +13,7 @@ var canva = {
 
 
 function setup( playerStartPoint, difLevel ) {
-    
+
     // insert canvas HTML
     let canvasHTML = `<div id="maze-container">
                         <canvas id="maze" width=${canva.width} height=${canva.height}></canvas>
@@ -90,7 +92,7 @@ function setup( playerStartPoint, difLevel ) {
     });
         
     // draw the maze
-    draw ( ctx, player, hunterArr );
+    draw ( ctx, player );
 }
 
 // create the cell objects of the grid
@@ -129,9 +131,10 @@ function path() {
 }
 
 // display the maze
-function draw ( ctx, player, hunterArr ) {
-
-    let intv = setInterval( function(){
+function draw ( ctx, player ) {
+   
+    
+    intv = setInterval( () => {
         ctx.clearRect(0, 0, canva.width, canva.height);
     
         // draw the background
@@ -157,14 +160,21 @@ function draw ( ctx, player, hunterArr ) {
 
         // winning
         let won = winning( player );
-        if( won ) clearInterval( intv );
-
+        if( won ) {
+            clearInterval( intv );
+            setTimeout(() => alert( "YOU WON!!!!!"), 1)
+            window.location.reload();            
+        }
         // moves hunters
-        for ( let i = 0; i < hunterArr.length; i++ ) {
-            hunterArr[i].moves();
+        if(frames % 2 === 0) {
+            for ( let i = 0; i < hunterArr.length; i++ ) {
+                hunterArr[i].moves();
+            }
         }
 
-    }, 1000/ 5 );
+        frames++;
+
+    }, 1200/ 6 );
 }
 
 // removing cells to create the path
@@ -247,7 +257,12 @@ window.addEventListener('load', () => {
     });
 
     document.querySelector('.start').addEventListener('click', () => {
+
+        if(intv){
+            clearInterval(intv)
+        }
         grid = [];
+        frames = 0;
         if( document.getElementById('empty') ) document.getElementById('empty').remove();
         if( document.getElementById('maze-container') ) document.getElementById('maze-container').remove();
         setup( 0, level );
